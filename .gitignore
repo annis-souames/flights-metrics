@@ -1,3 +1,5 @@
 .venv
 .venv/*
 libs
+config/env.json
+config/kafka.json
