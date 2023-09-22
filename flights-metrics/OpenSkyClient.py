@@ -1,12 +1,34 @@
+# @todo : Add some logging
+# @todo: Add tests
+
+import requests
+import urllib.parse
+
 
 class OpenSkyClient():
-    def __init__():
-        self.api = OpenSkyApi()
+    base_url = "https://opensky-network.org/api/"
+    
+    def __init__(self):
         pass
 
-    def getFlightsInBBox(bbox:tuple):
+    def getResource(endpoint: str, parameters: dict):
+        url = urllib.parse.urljoin(OpenSkyClient.base_url, endpoint)
+        try:
+            resp = requests.get(url, params=parameters)
+        except requests.exceptions.HTTPError as errh:
+            print("Http Error:", errh)
+        except requests.exceptions.ConnectionError as errc:
+            print("Error Connecting:", errc)
+        except requests.exceptions.Timeout as errt:
+            print("Timeout Error:", errt)
+        except requests.exceptions.RequestException as err:
+            print("OOps: Something Else", err)
+        else:
+            return resp.json()
+
+    def getStatesInBBox(self,bbox:tuple):
         #bbox = (min latitude, max latitude, min longitude, max longitude)
-        states = self.api.get_states(bbox=bbox)
+        states = requests.get(base_url)
         for s in states.states:
             print("(%r, %r, %r, %r)" % (s.longitude, s.latitude, s.baro_altitude, s.velocity))
         
