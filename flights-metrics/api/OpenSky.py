@@ -26,11 +26,15 @@ class OpenSkyClient():
         except requests.exceptions.RequestException as err:
             print("OOps: Something Else", err)
         else:
-            return resp.text
+            return resp.json()
 
-    def getStatesInBBox(self, bbox: tuple):
-        #bbox = (min latitude, max latitude, min longitude, max longitude)
-        states = requests.get(base_url)
-        for s in states.states:
-            print("(%r, %r, %r, %r)" % (s.longitude, s.latitude, s.baro_altitude, s.velocity))
-        
+    def getStatesInRegion(self, boundingBox: dict):
+        # bbox = (min latitude, max latitude, min longitude, max longitude)
+        bbox = (
+                boundingBox["min_lat"], 
+                boundingBox["max_lat"], 
+                boundingBox["min_long"],
+                boundingBox["max_long"]
+            )
+        states = self.getResource("states/all", bbox)
+        print(states)
