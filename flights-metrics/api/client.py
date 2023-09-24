@@ -4,6 +4,7 @@
 import requests
 import urllib.parse
 import pdb
+from .state import StateParser
 
 class OpenSkyClient():
     base_url = "https://opensky-network.org/api/"
@@ -30,11 +31,5 @@ class OpenSkyClient():
 
     def getStatesInRegion(self, boundingBox: dict):
         # bbox = (min latitude, max latitude, min longitude, max longitude)
-        bbox = (
-                boundingBox["min_lat"], 
-                boundingBox["max_lat"], 
-                boundingBox["min_long"],
-                boundingBox["max_long"]
-            )
-        states = self.getResource("states/all", bbox)
-        print(states)
+        states = self.getResource("states/all", boundingBox)
+        return StateParser(states)

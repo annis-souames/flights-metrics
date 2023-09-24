@@ -2,14 +2,14 @@ import json
 
 
 class Config():  
-    _KAFKA_CONFIG_PATH: str = "../../config/kafka.example.json"
-    _ENV_CONFIG_PATH: str = "../../config/env.json"
+    _KAFKA_CONFIG_PATH: str = "../config/kafka.example.json"
+    _ENV_CONFIG_PATH: str = "../config/env.json"
 
     def __init__(self, type: str, path: str = None):
         path = None
-        if type == "env" and path == None:
+        if type == "env" and path is None:
             path = Config._ENV_CONFIG_PATH
-        elif type == "kafka" and path == None:
+        elif type == "kafka" and path is None:
             path = Config._KAFKA_CONFIG_PATH
         else:
             print("Type of config has to either be \"env\" or \"kafka\" ")
