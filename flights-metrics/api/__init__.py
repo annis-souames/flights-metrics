@@ -1,1 +1,1 @@
-from .OpenSky import OpenSkyClient
+from .opensky import OpenSkyClient
