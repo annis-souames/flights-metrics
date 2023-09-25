@@ -8,7 +8,14 @@ class StateParser():
 
     def _parseState(self, state: list):
         return {
-            'id': state[0],
-            'flight': state[1],
-            'country': state[2]
+            'icao24': state[0],
+            'callsign': state[1],
+            'origin_country': state[2],
+            'updated_at': state[4],
+            'position': {
+                'lon': state[5],
+                'lat': state[6]
+            },
+            'velocity': state[9],
+            'altitude': state[13]
         }
