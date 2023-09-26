@@ -6,6 +6,7 @@ from requests.auth import HTTPBasicAuth
 import urllib.parse
 import pdb
 import time
+from loguru import logger
 from .state import StateParser
 
 
@@ -52,7 +53,7 @@ class OpenSkyClient():
             self.credits = response.headers['X-Rate-Limit-Remaining']
         if 'X-Rate-Limit-Retry-After-Seconds' in response.headers:
             self.retry_after = response.headers['X-Rate-Limit-Retry-After-Seconds']
-        print("You have ", response.headers['X-Rate-Limit-Remaining'])
+        logger.debug(f'You have {response.headers["X-Rate-Limit-Remaining"]} credits left')
         #print(response.headers['X-Rate-Limit-Retry-After-Seconds'])
 
     def getStatesInRegion(self, boundingBox: dict):
