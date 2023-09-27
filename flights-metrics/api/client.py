@@ -32,13 +32,13 @@ class OpenSkyClient():
                                                 
                                )
         except requests.exceptions.HTTPError as errh:
-            print("Http Error:", errh)
+            logger.error("Http Error:", errh)
         except requests.exceptions.ConnectionError as errc:
-            print("Error Connecting:", errc)
+            logger.error("Error Connecting:", errc)
         except requests.exceptions.Timeout as errt:
-            print("Timeout Error:", errt)
+            logger.error("Timeout Error:", errt)
         except requests.exceptions.RequestException as err:
-            print("OOps: Something Else", err)
+            logger.error("OOps: Something Else", err)
         else:
             print(resp.content)
             self.updateLimitInformation(resp)
@@ -53,7 +53,7 @@ class OpenSkyClient():
             self.credits = response.headers['X-Rate-Limit-Remaining']
         if 'X-Rate-Limit-Retry-After-Seconds' in response.headers:
             self.retry_after = response.headers['X-Rate-Limit-Retry-After-Seconds']
-        logger.debug(f'You have {response.headers["X-Rate-Limit-Remaining"]} credits left')
+        logger.info(f'You have {response.headers["X-Rate-Limit-Remaining"]} credits left')
         #print(response.headers['X-Rate-Limit-Retry-After-Seconds'])
 
     def getStatesInRegion(self, boundingBox: dict):
