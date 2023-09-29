@@ -1,6 +1,10 @@
 from api import OpenSkyClient
 from config import Config
+from loguru import logger
 
+logger.remove()
+
+logger.add("logs.log", rotation="250 MB")
 
 cfg = Config("env")
 
