@@ -10,9 +10,9 @@ from loguru import logger
 from .state import StateParser
 
 
-class OpenSkyClient():
+class OpenSkyClient:
     base_url = "https://opensky-network.org/api/"
-    
+
     def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
@@ -23,14 +23,11 @@ class OpenSkyClient():
     def getResource(self, endpoint: str, parameters: dict = {}):
         url = urllib.parse.urljoin(OpenSkyClient.base_url, endpoint)
         print(url)
-        #pdb.set_trace()
+        # pdb.set_trace()
         try:
             resp = requests.get(
-                                url, 
-                                params=parameters,
-                                auth=HTTPBasicAuth(self.username, self.password)
-                                                
-                               )
+                url, params=parameters, auth=HTTPBasicAuth(self.username, self.password)
+            )
         except requests.exceptions.HTTPError as errh:
             logger.error("Http Error:", errh)
         except requests.exceptions.ConnectionError as errc:
@@ -42,19 +39,23 @@ class OpenSkyClient():
         else:
             print(resp.content)
             self.updateLimitInformation(resp)
-            if resp.status_code == 429:  # In case of too many requests, wait for X seconds then retry
+            if (
+                resp.status_code == 429
+            ):  # In case of too many requests, wait for X seconds then retry
                 # TODO : Add logging here to inform
                 time.sleep(self.retry_after)
                 self.getResource(endpoint, parameters)
             return resp.json()
-        
+
     def updateLimitInformation(self, response: requests.Response):
-        if 'X-Rate-Limit-Remaining' in response.headers:
-            self.credits = response.headers['X-Rate-Limit-Remaining']
-        if 'X-Rate-Limit-Retry-After-Seconds' in response.headers:
-            self.retry_after = response.headers['X-Rate-Limit-Retry-After-Seconds']
-        logger.info(f'You have {response.headers["X-Rate-Limit-Remaining"]} credits left')
-        #print(response.headers['X-Rate-Limit-Retry-After-Seconds'])
+        if "X-Rate-Limit-Remaining" in response.headers:
+            self.credits = response.headers["X-Rate-Limit-Remaining"]
+        if "X-Rate-Limit-Retry-After-Seconds" in response.headers:
+            self.retry_after = response.headers["X-Rate-Limit-Retry-After-Seconds"]
+        logger.info(
+            f'You have {response.headers["X-Rate-Limit-Remaining"]} credits left'
+        )
+        # print(response.headers['X-Rate-Limit-Retry-After-Seconds'])
 
     def getStatesInRegion(self, boundingBox: dict):
         # bbox = (min latitude, max latitude, min longitude, max longitude)
