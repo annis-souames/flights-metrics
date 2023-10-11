@@ -17,7 +17,7 @@ client = FlightRadarClient()
 
 
 # Lambda function to run for producer
-def run_producer(event, context):
+def run_producer(event=None, context=None):
     resp = client.getFlightsInRegion(cfg.get("bounding_box"))
 
     for flight in resp:
@@ -26,3 +26,6 @@ def run_producer(event, context):
         except Exception as e:
             logger.error(f"Error happened while producing a record : {str(e)}")
             continue
+
+
+run_producer()
