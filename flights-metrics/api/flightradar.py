@@ -13,12 +13,12 @@ class FlightRadarClient:
     def getFlightsInRegion(self, bbox: dict):
         zone = f"{bbox['lamax']},{bbox['lamin']},{bbox['lomax']},{bbox['lomin']}"
         print(zone)
-        flights = self.client.get_flights(bounds=zone)
-        if flights == None:
+        resp = self.client.get_flights(bounds=zone)
+        if resp == None:
             logger.error("FlightRadar24 - API returned none object")
             sys.exit(1)
-        if len(flights) == 0:
+        elif len(resp) == 0:
             logger.error("FlightRadar24 - API returned empty array of flights")
             sys.exit(1)
-
-        return flights.__dict__
+        flights = [f.__dict__ for f in resp]
+        return flights
