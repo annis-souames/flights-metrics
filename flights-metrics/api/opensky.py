@@ -1,5 +1,7 @@
-# @todo : Add some logging
-# @todo: Add tests
+"""
+For now this API is down, please use FlightRadarClient in flightradar
+
+"""
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -38,12 +40,19 @@ class OpenSkyClient:
             logger.error("OOps: Something Else", err)
         else:
             print(resp.content)
+            print(resp.request.url)
             self.updateLimitInformation(resp)
             if (
                 resp.status_code == 429
             ):  # In case of too many requests, wait for X seconds then retry
                 # TODO : Add logging here to inform
+                logger.error("States is null, retrying after one minute")
                 time.sleep(self.retry_after)
+                self.getResource(endpoint, parameters)
+            if resp.content.states == None:
+                logger.error("States is null, retrying after one minute")
+                print("States is null, retrying after one minute")
+                time.sleep(60)
                 self.getResource(endpoint, parameters)
             return resp.json()
 
@@ -57,7 +66,7 @@ class OpenSkyClient:
         )
         # print(response.headers['X-Rate-Limit-Retry-After-Seconds'])
 
-    def getStatesInRegion(self, boundingBox: dict):
+    def getFlightsInRegion(self, boundingBox: dict):
         # bbox = (min latitude, max latitude, min longitude, max longitude)
         states = self.getResource("states/all", boundingBox)
         return StateParser(states)

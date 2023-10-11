@@ -1,4 +1,4 @@
-from api import OpenSkyClient
+from api import FlightRadarClient
 from config import Config
 from loguru import logger
 from stream import RecordsProducer
@@ -11,13 +11,13 @@ logger.add("logs/main.log", rotation="250 MB", retention="2 months")
 cfg = Config("env")
 kafka_cfg = Config("kafka")
 
-producer = RecordsProducer(kafka_cfg)
+# producer = RecordsProducer(kafka_cfg)
 
-client = OpenSkyClient(cfg.get("username"), cfg.get("password"))
+client = FlightRadarClient()
 
 
-resp = client.getStatesInRegion(cfg.get("bounding_box"))
+resp = client.getFlightsInRegion(cfg.get("bounding_box"))
 
-print(resp.states)
+print(resp)
 
-producer.send(resp, "flights")
+# producer.send(resp)
