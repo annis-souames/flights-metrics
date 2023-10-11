@@ -1,21 +1,27 @@
 import json
 from kafka import KafkaProducer, KafkaConsumer
 from loguru import logger
+from config import Config
 
 
 class RecordsProducer:
-    def __init__(self, config: dict):
-        self.topic = (config["topic"],)
-        self.server = config["bootstrap_server"]
+    def __init__(self, config: Config):
+        print(config)
+        self.topic = config.get("topic")
+        self.server = config.get("bootstrap_server")
         self.producer = KafkaProducer(
             value_serializer=lambda m: json.dumps(m).encode("ascii"),
-            bootstrap_servers=[config["topic"]],
-            retries=config["max_retries"],
+            bootstrap_servers=[config.get("bootstrap_server")],
+            retries=config.get("max_retries"),
+            sasl_mechanism=config.get("sasl_mechanism"),
+            sasl_plain_username=config.get("username"),
+            sasl_plain_password=config.get("password"),
         )
+        print(self.producer.bootstrap_connected())
 
     def send(self, msg: dict):
         # produce asynchronously with callbacks
-        self.producer.send("my-topic", msg).add_callback(
+        self.producer.send(self.topic, msg).add_callback(
             self._on_send_success
         ).add_errback(self._on_send_error)
         self.producer.flush()
