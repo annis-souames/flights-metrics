@@ -3,15 +3,15 @@
 PACKAGE_NAME="vendor.zip"
 
 function cleanup()  {
-    # remove target folder
-    rm -rfd target
+    # remove vendor folder
+    rm -rfd vendor
 }
 
 function install_dependencies() {
-    mkdir target
-    mkdir target/python
-    # install the project dependencies inside target/python folder
-    pip3 install --target=target/python -r requirements.txt
+    mkdir vendor
+    mkdir vendor/python
+    # install the project dependencies inside vendor/python folder
+    pip3 install --target=vendor/python -r requirements.txt
 }
 
 function build_zip(){

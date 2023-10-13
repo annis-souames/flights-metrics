@@ -1,0 +1,1 @@
+zip -r package.zip . -x "vendor/*" ".venv/*" ".vscode/*"
