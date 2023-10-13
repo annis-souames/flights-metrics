@@ -1,43 +1,69 @@
 #!/bin/bash
 
-PACKAGE_NAME="vendor.zip"
+# this is b/c pipenv stores the virtual env in a different
+# directory so we need to get the path to it
+SITE_PACKAGES=$(pipenv --venv)/lib/python3.10/site-packages
 OUTPUT="/mnt/c/Users/souam/Documents/Data Engineering/flights-metrics/."
 
+echo "Library Location: $SITE_PACKAGES"
+DIR=$(pwd)
 
-function cleanup()  {
-    # remove vendor folder
-    rm -rfd vendor
-}
+# Make sure pipenv is good to go
+#echo "Do fresh install to make sure everything is there"
+#pipenv install
 
-function install_dependencies() {
-    mkdir vendor
-    mkdir vendor/python
-    # install the project dependencies inside vendor/python folder
-    pip3 install --target=vendor/python -r requirements.txt
-}
+cd $SITE_PACKAGES
+zip -r9 $DIR/vendor.zip *
 
-function build_zip(){
-    cd vendor
+cp $DIR/vendor.zip "${OUTPUT}"
 
-    zip -r ../${PACKAGE_NAME} .
-    cd ..
-}
 
-function copy_to_windows(){
-    cp vendor.zip "${OUTPUT}"
-}
+#cd $DIR
+#zip -g package.zip posts.py
 
-# function copy_source_files() {
-#     # recursively copy all the source files to target/python folder
-#     cp -R emrlauncher/ target/python
+
+
+
+
+
+
+# PACKAGE_NAME="vendor.zip"
+# OUTPUT="/mnt/c/Users/souam/Documents/Data Engineering/flights-metrics/."
+
+
+# function cleanup()  {
+#     # remove vendor folder
+#     rm -rfd vendor
 # }
 
-# function package() {
-#     # recursively zip contents inside target folder
-#     cd target/ && zip -r ${PACKAGE_NAME} .
+# function install_dependencies() {
+#     mkdir vendor
+#     mkdir vendor/python
+#     cd $SITE_PACKAGES
+#     zip -r9 $DIR/package.zip *
 # }
 
-cleanup
-install_dependencies
-build_zip
-copy_to_windows
+# function build_zip(){
+#     cd vendor
+#     zip -r ../${PACKAGE_NAME} .
+#     cd ..
+# }
+
+# function copy_to_windows(){
+#     cp vendor.zip "${OUTPUT}"
+# }
+
+# # function copy_source_files() {
+# #     # recursively copy all the source files to target/python folder
+# #     cp -R emrlauncher/ target/python
+# # }
+
+# # function package() {
+# #     # recursively zip contents inside target folder
+# #     cd target/ && zip -r ${PACKAGE_NAME} .
+# # }
+
+# cleanup
+# install_dependencies
+# build_zip
+# copy_to_windows

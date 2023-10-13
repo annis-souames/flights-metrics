@@ -1,12 +1,13 @@
 from api import FlightRadarClient
 from config import Config
+
 from loguru import logger
 from stream import RecordsProducer
 
 
 logger.remove()
 
-logger.add("logs/main.log", rotation="250 MB", retention="2 months")
+logger.add("/tmp/logs/main.log", rotation="250 MB", retention="2 months")
 
 cfg = Config("env")
 kafka_cfg = Config("kafka")
@@ -24,7 +25,7 @@ def run_producer(event=None, context=None):
         try:
             producer.send(flight)
         except Exception as e:
-            logger.error(f"Error happened while producing a record : {str(e)}")
+            # logger.error(f"Error happened while producing a record : {str(e)}")
             continue
 
 
