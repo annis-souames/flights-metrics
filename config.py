@@ -2,8 +2,8 @@ import json
 
 
 class Config:
-    _KAFKA_CONFIG_PATH: str = "../config/kafka.json"
-    _ENV_CONFIG_PATH: str = "../config/env.json"
+    _KAFKA_CONFIG_PATH: str = "config/kafka.json"
+    _ENV_CONFIG_PATH: str = "config/env.json"
 
     def __init__(self, type: str, path: str = None):
         path = None

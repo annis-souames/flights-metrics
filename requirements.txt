@@ -1,4 +1,0 @@
-requests==2.31.0
-flightradarapi==1.3.10
-kafka-python==2.0.2
-loguru==0.7.2

@@ -1,6 +1,8 @@
 #!/bin/bash
 
 PACKAGE_NAME="vendor.zip"
+OUTPUT="/mnt/c/Users/souam/Documents/Data Engineering/flights-metrics/."
+
 
 function cleanup()  {
     # remove vendor folder
@@ -22,7 +24,7 @@ function build_zip(){
 }
 
 function copy_to_windows(){
-    cp vendor.zip /mnt/c/Users/souam/Documents/.
+    cp vendor.zip "${OUTPUT}"
 }
 
 # function copy_source_files() {
