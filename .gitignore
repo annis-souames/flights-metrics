@@ -4,3 +4,6 @@ libs
 config/env.json
 config/kafka.json
 *.pyc
+vendor/
+target/
+vendor.zip
