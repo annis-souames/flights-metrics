@@ -7,7 +7,7 @@ from stream import RecordsProducer
 
 logger.remove()
 
-logger.add("/tmp/logs/main.log", rotation="250 MB", retention="2 months")
+# logger.add("/tmp/logs/main.log", rotation="250 MB", retention="2 months")
 
 cfg = Config("env")
 kafka_cfg = Config("kafka")

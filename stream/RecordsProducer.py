@@ -9,7 +9,7 @@ class RecordsProducer:
         print(config)
         self.topic = config.get("topic")
         self.server = config.get("bootstrap_server")
-
+        
         self.producer = KafkaProducer(
             value_serializer=lambda m: json.dumps(m).encode("ascii"),
             bootstrap_servers=[config.get("bootstrap_server")],
