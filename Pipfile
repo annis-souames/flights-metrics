@@ -8,6 +8,7 @@ requests = "*"
 flightradarapi = "*"
 kafka-python = "*"
 loguru = "*"
+boto3 = "*"
 
 [dev-packages]
 

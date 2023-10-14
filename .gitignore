@@ -3,6 +3,7 @@
 libs
 config/env.json
 config/kafka.json
+config/aws.json
 *.pyc
 vendor/
 target/
