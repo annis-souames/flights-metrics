@@ -18,6 +18,9 @@ class S3Consumer:
             sasl_plain_password=kafkaConfig.get("password"),
             auto_offset_reset="earliest",
             value_deserializer=lambda m: json.loads(m.decode("ascii")),
+            consumer_timeout_ms=kafkaConfig.get(
+                "consumer_timeout"
+            ),  # Default : Timeout after 3 seconds
         )
 
         self.awsAccessKeyID = awsConfig.get("aws_access_key_id")
@@ -38,15 +41,19 @@ class S3Consumer:
 
         # Construct S3 object key based on your requirements
         s3_object_key = f"{self.s3Prefix}flight_{data['id']}.json"
-
         s3.put_object(Bucket=self.bucket, Key=s3_object_key, Body=data_json)
-        logger.info(f"Uploaded data to S3: {s3_object_key}")
 
     def consume(self, withS3: bool = True):
+        msg_counter, put_counter = 0, 0
         for msg in self.consumer:
             try:
-                logger.info(msg.value)
+                msg_counter += 1
                 if withS3:
                     self.uploadToS3(msg.value)
+                    put_counter += 1
             except Exception as e:
                 logger.error(f"An error occured {str(e)}")
+        self.consumer.close()
+        logger.info(
+            f"Consumer ended, it consumed and uploaded {put_counter} out of {msg_counter} records successfully."
+        )
