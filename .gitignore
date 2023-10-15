@@ -8,3 +8,4 @@ config/aws.json
 vendor/
 target/
 vendor.zip
+package.zip
