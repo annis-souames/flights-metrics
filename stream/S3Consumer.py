@@ -31,7 +31,6 @@ class S3Consumer:
             "s3",
             aws_access_key_id=self.awsAccessKeyID,
             aws_secret_access_key=self.awsAccessKeySecret,
-            aws_session_token=self.awsSessionToken,
         )
 
         # Assuming 'data' is a JSON object
