@@ -3,6 +3,7 @@ from kafka import KafkaConsumer
 from loguru import logger
 import json
 import boto3
+from datetime import datetime
 
 
 class S3Consumer:
@@ -28,24 +29,41 @@ class S3Consumer:
         self.awsSessionToken = awsConfig.get("aws_session_token")
         self.bucket = awsConfig.get("s3")["bucket"]
         self.s3Prefix = awsConfig.get("s3")["prefix"]
-
-    def uploadToS3(self, data: dict):
-        s3 = boto3.client(
+        self.s3 = boto3.client(
             "s3",
             aws_access_key_id=self.awsAccessKeyID,
             aws_secret_access_key=self.awsAccessKeySecret,
         )
 
+        # This is called once per invocation, creates new partition folder for efficient crawling
+        self.currentPrefix = self.createPartitionFolder()
+
+    def createPartitionFolder(self):
+        # Get the current date and time as a string
+        current_datetime = datetime.now().strftime("%Y-%m-%d-%H-%M")
+
+        # Construct the full path for the new subfolder
+        new_folder_path = f"{self.s3Prefix}/{current_datetime}/"
+
+        # Create the subfolder in the S3 bucket
+        self.s3.put_object(Bucket=self.bucket, Key=new_folder_path)
+        logger.info(f"Created new partition folder {new_folder_path}")
+        return new_folder_path
+
+    def uploadToS3(self, data: dict):
         # Assuming 'data' is a JSON object
         data_json = json.dumps(data)
 
         # Construct S3 object key based on your requirements
-        s3_object_key = f"{self.s3Prefix}flight_{data['id']}.json"
-        s3.put_object(Bucket=self.bucket, Key=s3_object_key, Body=data_json)
+        s3_object_key = f"{self.currentPrefix}flight_{data['id']}.json"
+        self.s3.put_object(Bucket=self.bucket, Key=s3_object_key, Body=data_json)
+        logger.success(f"Uploaded {s3_object_key} to S3 bucket")
 
     def consume(self, withS3: bool = True):
         msg_counter, put_counter = 0, 0
         for msg in self.consumer:
+            if put_counter >= 100:
+                break
             try:
                 msg_counter += 1
                 if withS3:
