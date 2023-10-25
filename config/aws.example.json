@@ -1,0 +1,9 @@
+{
+    "aws_access_key_id": "",
+    "aws_access_key_secret": "8CNy1gklbbAWt/hu4UH5HsadOCslk4IvggJbFt1C",
+    "aws_session_token": "FwoGZXIvYXdzEEYaDA0yj5y9IJPFevX0xCLGAU9aLRSBMgLsyk8R83CaOFfWr2RWl7KN2ULvhsPYXtzSkIRuJxXvFeHJTsF/XVSyoJJIL6mWX3PD9SIVT4duv1xDVLxKBATWbGX4+TLhOoCIkEwtJvKRkW4btuvEK7phZO7nuGFtrnCq7Hoi+n9vKhKppHttkEoxPWhxWwZuc/uOP2E6vZ7FV6IPlEh8D9wv+wEIMbOC7cmA6rQinUQe8aJUOFzDjHu74IrgA5b/tdzO5Id/y6aScS0fLjCoLNQoxNCwmLjLfii2+qupBjItAb3gksYMJviofHC5aGFt0NeqTCY4GXA+iShdi8taI9EhGzLmDBtTG+Tb5tJx",
+    "s3": {
+        "bucket": "flights-metrics-bucket",
+        "prefix": "data"
+    }
+}

@@ -11,7 +11,7 @@ class FlightRadarClient:
             self.client = FlightRadar24API(username, password)
 
     def getFlightsInRegion(self, bbox: dict):
-        zone = f"{bbox['lamax']},{bbox['lamin']},{bbox['lomax']},{bbox['lomin']}"
+        zone = f"{bbox['lamax']},{bbox['lamin']},{bbox['lomin']},{bbox['lomax']}"
         print(zone)
         resp = self.client.get_flights(bounds=zone)
         if resp == None:
