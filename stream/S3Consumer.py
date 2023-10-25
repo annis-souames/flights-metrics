@@ -62,7 +62,7 @@ class S3Consumer:
     def consume(self, withS3: bool = True):
         msg_counter, put_counter = 0, 0
         for msg in self.consumer:
-            if put_counter >= 100:
+            if put_counter >= 50:
                 break
             try:
                 msg_counter += 1

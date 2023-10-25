@@ -2,6 +2,7 @@ import json
 from kafka import KafkaProducer, KafkaConsumer
 from loguru import logger
 from config import Config
+from datetime import datetime
 
 
 class RecordsProducer:
@@ -9,7 +10,7 @@ class RecordsProducer:
         print(config)
         self.topic = config.get("topic")
         self.server = config.get("bootstrap_server")
-        
+        self.timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M")
         self.producer = KafkaProducer(
             value_serializer=lambda m: json.dumps(m).encode("ascii"),
             bootstrap_servers=[config.get("bootstrap_server")],
@@ -22,6 +23,8 @@ class RecordsProducer:
 
     def send(self, msg: dict):
         # produce asynchronously with callbacks
+        msg["timestamp"] = self.timestamp
+        print(msg)
         self.producer.send(self.topic, msg)
         self.producer.flush()
 
