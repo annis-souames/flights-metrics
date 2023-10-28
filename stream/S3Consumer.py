@@ -4,6 +4,7 @@ from loguru import logger
 import json
 import boto3
 from datetime import datetime
+import sys
 
 
 class S3Consumer:
@@ -34,9 +35,17 @@ class S3Consumer:
             aws_access_key_id=self.awsAccessKeyID,
             aws_secret_access_key=self.awsAccessKeySecret,
         )
+        self.athena = boto3.client(
+            "athena",
+            aws_access_key_id=self.awsAccessKeyID,
+            aws_secret_access_key=self.awsAccessKeySecret,
+            region_name="eu-west-2",
+        )
 
         # This is called once per invocation, creates new partition folder for efficient crawling
         self.currentPrefix = self.createPartitionFolder()
+        self.s3URI = f"s3://{self.bucket}/{self.currentPrefix}"
+        self.athenaOutputLocation = awsConfig.get("athena")["output"]
 
     def createPartitionFolder(self):
         # Get the current date and time as a string
@@ -50,6 +59,23 @@ class S3Consumer:
         logger.info(f"Created new partition folder {new_folder_path}")
         return new_folder_path
 
+    # This method will update partitions without using Glue
+    def updateAthenaPartition(self):
+        folderName = self.s3URI.split("/")[-2].strip("/")
+        query = f"""ALTER TABLE flights.main ADD
+                    PARTITION (dt = '{folderName}') 
+                    LOCATION '{self.s3URI}';"""
+        try:
+            self.athena.start_query_execution(
+                QueryString=query,
+                ResultConfiguration={"OutputLocation": self.athenaOutputLocation},
+            )
+        except Exception as e:
+            logger.error(f"Couldn't add partition to Athena {folderName}: {e}")
+            sys.exit(1)
+        else:
+            logger.success(f"Added partition {folderName} to Athena")
+
     def uploadToS3(self, data: dict):
         # Assuming 'data' is a JSON object
         data_json = json.dumps(data)
@@ -62,7 +88,7 @@ class S3Consumer:
     def consume(self, withS3: bool = True):
         msg_counter, put_counter = 0, 0
         for msg in self.consumer:
-            if put_counter >= 50:
+            if put_counter >= 100:
                 break
             try:
                 msg_counter += 1
@@ -72,6 +98,7 @@ class S3Consumer:
             except Exception as e:
                 logger.error(f"An error occured {str(e)}")
         self.consumer.close()
+        self.updateAthenaPartition()
         logger.info(
             f"Consumer ended, it consumed and uploaded {put_counter} out of {msg_counter} records successfully."
         )
