@@ -53,7 +53,7 @@ bash package-deps.sh
 
 ## Improvements for the future
 
-- Implement a CI/CD pipeline with Github Actions and AWS SAM to automate the deployment of new versions.
+- Implement a CI/CD pipeline with GitHub Actions and AWS SAM to automate the deployment of new versions.
 - Add an ETL function to convert JSON files to Parquet for more efficient analytics.
 - Cache some parts of the dashboard hourly to reduce the number of requests and costs. 
 
