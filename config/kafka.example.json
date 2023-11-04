@@ -1,3 +1,10 @@
 {
-    "cluster_name" : "CLUSTER_NAME"
+    "topic": "",
+    "bootstrap_server": "",
+    "max_retries": 3,
+    "security_protocol": "SASL_SSL",
+    "sasl_mechanism": "SCRAM-SHA-256",
+    "username": "",
+    "password": "",
+    "consumer_timeout": 20000
 }
