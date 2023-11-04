@@ -1,0 +1,12 @@
+{
+    "aws_access_key_id": "",
+    "aws_access_key_secret": "",
+    "aws_session_token": "",
+    "s3": {
+        "bucket": "flights-metrics-bucket",
+        "prefix": "data"
+    },
+    "athena": {
+        "output": "s3://flights-metrics-results"
+    }
+}
