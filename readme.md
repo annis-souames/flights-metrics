@@ -2,7 +2,7 @@
 
 
 <p align="center">
-    <img src="images/world.png" alt="Logo" width="80" height="80">
+    <img src="docs/world.png" alt="Logo" width="80" height="80">
 <h1 align="center">Flights Metrics</h1>
 
   <p align="center">
