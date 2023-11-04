@@ -1,7 +1,9 @@
-# ✈️ Flights-Metrics
 
 
-<h3 align="center">Flights Metrics</h3>
+
+<p align="center">
+    <img src="images/world.png" alt="Logo" width="80" height="80">
+<h1 align="center">Flights Metrics</h1>
 
   <p align="center">
     Near Real-time metrics for flights over a region.
