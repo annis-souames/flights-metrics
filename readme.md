@@ -40,7 +40,7 @@ To configure the projects with your preferences, you need to edit those three co
 - `env.json`: Rename the `env.example.json` file into `env.json` and put the bounding box coordinates for the region of your choice (London is the default configuration).
 - `kafka.json`: Similarly, rename `kafka.example.json` to `kafka.json` and include all the required parameters for Kafka to run: bootstrap server, username, password, etc. Feel free to experiment with other options.  
 
-## Deploying to Lamba
+## Deploying to AWS Lambda
 
 Currently, we have two different bash scripts to generate the zip files to be uploaded on AWS lambda: `vendor.zip` for dependencies and `package.zip` for both the producer and consumer functions.
 
