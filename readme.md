@@ -30,7 +30,7 @@ The consumer creates partitions in Athena (see note) and the Metabase dashboard 
 
 ![architecture](docs/flights-metrics-architecture.png)
 
-**Note:** The old architecture was using Glue to automate the process of adding new partitions from S3 to Athena, however, this approach was expensive and we developed a new method in `stream/S3Consumer.py` to add partitions to S3 directly using an Athena query, this reduces costs by over **60%**!
+**Note:** The old architecture was using Glue to automate the process of adding new partitions from S3 to Athena, however, this approach was expensive and was replaced by a new method in `stream/S3Consumer.py` to add partitions to S3 directly using an Athena query, this reduces costs by over **60%**!
 
 ## Setting up
 
